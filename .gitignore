@@ -41,3 +41,8 @@ vignettes/*.pdf
 # OS files
 .DS_Store
 Thumbs.db
+
+# R documentation
+inst/doc
+/doc/
+/Meta/
