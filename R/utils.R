@@ -24,3 +24,20 @@ co_logo <- function(out = c("html", "path")) {
   return(x)
 
 }
+
+#' Open example report in the browser
+#'
+#' An example report showing layout options is provided in the package. This
+#' function loads the report in your browser
+#'
+#' @export
+show_example_report <- function() {
+
+  example_report <- paste0(
+    "file://",
+    system.file("resources", "html", "co_deck.html", package = "deckhand")
+  )
+
+  utils::browseURL(example_report)
+
+}

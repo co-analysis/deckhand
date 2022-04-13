@@ -32,3 +32,6 @@ Imports:
     tools
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
+Suggests: 
+    knitr
+VignetteBuilder: knitr

@@ -1,0 +1,824 @@
+---
+pagetitle: "CO deck example"
+output: deckhand::co_deck
+---
+
+``` {r setup, include=FALSE}
+library(ggplot2)
+library(deckhand)
+
+knitr::opts_chunk$set(
+  echo = FALSE, warning = FALSE, message = FALSE
+)
+
+test_plot <- ggplot(
+   palmerpenguins::penguins, 
+   aes(x = flipper_length_mm, y = bill_length_mm)) + 
+  geom_point(
+    aes(colour = species, shape = species),
+    size = 3, alpha = 0.8) +
+  geom_smooth(aes(color = species),
+              method = "lm", formula = y ~ x, se = FALSE) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(
+    title = "Penguin size by species",
+    x = "Flipper length (mm)",
+    y = "Bill length (mm)"
+  ) +
+  theme_co_report()
+
+```
+
+::::{.grid-page .front-cover}
+
+:::{.security-marking}
+SECURITY-MARKING
+:::
+
+:::{.logo}
+`r deckhand::co_logo()`
+:::
+
+:::{.title}
+Report title
+:::
+
+:::{.panel}
+:::
+
+:::{.subtitle}
+Report subtitle
+:::
+
+:::{.date}
+DD Month YYYY<br />
+Analysis & Insight, Cabinet Office
+:::
+
+::::
+
+::::{.grid-page .single-content}
+
+:::{.title}
+{pagedown} reports for Cabinet Office
+:::
+
+:::{.maintext}
+The `{deckhand}` package is a wrapper around the [`{pagedown}`](https://pagedown.rbind.io/) package to enable you to make reports in Rmarkdown that align (broadly) with the Cabinet Office's corporate identity guidelines.
+
+A page is created in your Rmarkdown by creating a grid-page entity `::::{.grid-page .page-type}` where `.page-type` is the layout design you want to use (remember to close off with four colons `::::` before your next page).
+
+You can then include page elements such as `:::{.title}`, `:::{.maintext}` and `:::{.content1}`, closing each element with `:::`. See below for an example.
+
+The following pages show the supported layouts. You can also construct custom layouts based on the underlying grid system (explained at the end).
+
+:::
+
+:::{.content1}
+
+````
+::::{.grid-page .two-col}
+
+:::{.title}
+Page title
+:::
+
+:::{.maintext}
+Main commentary text for the page
+:::
+
+:::{.content1}
+```r
+my_r_code
+```
+:::
+
+:::{.content2}
+```r
+more_r_code
+```
+:::
+
+::::
+````
+
+:::
+
+::::
+
+::::{.grid-page .divider}
+
+:::{.panel}
+:::
+
+:::{.title .outline}
+Divider title
+:::
+
+:::{.maintext .outline}
+Use `.divider` to use this page layout. This is the `.maintext` element.
+:::
+
+::::
+
+::::{.grid-page .single-content}
+
+:::{.title .outline}
+Single Content
+:::
+
+:::{.maintext .outline}
+Use `.single-content-wide` to use this page layout. This is the `.maintext` element.
+:::
+
+:::{.secondarytext .outline}
+This is the `.secondarytext` element.
+:::
+
+:::{.content1 .outline}
+```{r 1c, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 8, height = 8)
+```
+:::
+
+::::
+
+::::{.grid-page .single-content-wide}
+
+:::{.title .outline}
+Single Content (wide)
+:::
+
+:::{.maintext .outline}
+Use `.single-content-wide` to use this page layout. This is the `.maintext`.
+:::
+
+
+:::{.content1 .outline}
+```{r 1w, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 12, height = 8)
+```
+:::
+
+::::
+
+::::{.grid-page .single-content-high}
+
+:::{.title .outline}
+Single Content (high)
+:::
+
+:::{.maintext .outline}
+Use `.single-content-high` to use this page layout. This is the `.maintext`.
+:::
+
+
+:::{.content1 .outline}
+```{r 1h, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 8, height = 12)
+```
+:::
+
+::::
+
+::::{.grid-page .two-col}
+
+:::{.title .outline}
+Two column
+:::
+
+:::{.maintext .outline}
+Use `.two-col` to use this page layout. This is the `.maintext`.
+:::
+
+:::{.secondarytext .outline}
+This is the `.secondarytext` element.
+:::
+
+:::{.content1 .outline}
+```{r 2c_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 4, height = 8)
+```
+:::
+
+:::{.content2 .outline}
+```{r 2c_2, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 4, height = 8)
+```
+:::
+
+::::
+
+::::{.grid-page .two-col-wide}
+
+:::{.title .outline}
+Two column (wide)
+:::
+
+:::{.maintext .outline}
+Use `.two-col-wide` to use this page layout. This is the `.maintext`.
+:::
+
+:::{.content1 .outline}
+```{r 2w_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 6, height = 8)
+```
+:::
+
+:::{.content2 .outline}
+```{r 2w_2, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 6, height = 8)
+```
+:::
+
+::::
+
+::::{.grid-page .two-row}
+
+:::{.title .outline}
+Two row
+:::
+
+:::{.maintext .outline}
+Use `.two-row` to use this page layout. This is the `.maintext`.
+:::
+
+:::{.secondarytext .outline}
+This is the `.secondarytext` element.
+:::
+
+:::{.content1 .outline}
+```{r 2r_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 8, height = 4)
+```
+:::
+
+:::{.content2 .outline}
+```{r 2r_2, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 8, height = 4)
+```
+:::
+
+::::
+
+::::{.grid-page .two-row-high}
+
+:::{.title .outline}
+Two row (high)
+:::
+
+:::{.maintext .outline}
+Use `.two-row-high` to use this page layout. This is the `.maintext`.
+:::
+
+:::{.content1 .outline}
+```{r 2h_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 8, height = 6)
+```
+:::
+
+:::{.content2 .outline}
+```{r 2h_2, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 8, height = 6)
+```
+:::
+
+::::
+
+::::{.grid-page .three-col}
+
+:::{.title .outline}
+Three column
+:::
+
+:::{.maintext .outline}
+Use `.three-col` to use this page layout. This is the `.maintext`.
+:::
+
+
+:::{.content1 .outline}
+```{r 3c_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(test_plot, width = 4, height = 8)
+```
+:::
+
+:::{.content2 .outline}
+```{r 3c_2, echo=FALSE, warning=FALSE, message=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 4, height = 8)
+```
+:::
+
+:::{.content3 .outline}
+```{r 3c_3, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content3")
+
+insert_svg(p, width = 4, height = 8)
+```
+:::
+
+::::
+
+::::{.grid-page .three-row}
+
+:::{.title .outline}
+Three row
+:::
+
+:::{.maintext .outline}
+Use `.three-row` to use this page layout. This is the `.maintext`.
+:::
+
+
+:::{.content1 .outline}
+```{r 3r_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(test_plot, width = 8, height = 4)
+```
+:::
+
+:::{.content2 .outline}
+```{r 3r_2, echo=FALSE, warning=FALSE, message=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 8, height = 4)
+```
+:::
+
+:::{.content3 .outline}
+```{r 3r_3, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content3")
+
+insert_svg(p, width = 8, height = 4)
+```
+:::
+
+::::
+
+::::{.grid-page .three-row-small}
+
+:::{.title .outline}
+Three row (small)
+:::
+
+:::{.maintext .outline}
+Use `.three-row-small` to use this page layout. This is the `.maintext`.
+:::
+
+:::{.secondarytext .outline}
+This is the `.secondarytext` element.
+:::
+
+:::{.content1 .outline}
+```{r 3s_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content2 .outline}
+```{r 3s_2, echo=FALSE, warning=FALSE, message=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content3 .outline}
+```{r 3s_3, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content3")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+::::
+
+::::{.grid-page .four-content}
+
+:::{.title .outline}
+Four box content
+:::
+
+:::{.maintext .outline}
+Use `.four-content` to use this page layout. This is the `.maintext`.
+:::
+
+:::{.secondarytext .outline}
+This is the `.secondarytext` element.
+:::
+
+:::{.content1 .outline}
+```{r 4b_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content2 .outline}
+```{r 4b_2, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content3 .outline}
+```{r 4b_3, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content3")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content4 .outline}
+```{r 4b_4, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content4")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+::::
+
+::::{.grid-page .four-content-wide}
+
+:::{.title .outline}
+Four box content (wide)
+:::
+
+:::{.maintext .outline}
+Use `.four-content-wide` to use this page layout. This is the `.maintext`.
+:::
+
+:::{.content1 .outline}
+```{r 4w_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 6, height = 4)
+```
+:::
+
+:::{.content2 .outline}
+```{r 4w_2, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 6, height = 4)
+```
+:::
+
+:::{.content3 .outline}
+```{r 4w_3, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content3")
+
+insert_svg(p, width = 6, height = 4)
+```
+:::
+
+:::{.content4 .outline}
+```{r 4w_4, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content4")
+
+insert_svg(p, width = 6, height = 4)
+```
+:::
+
+::::
+
+::::{.grid-page .four-content-high}
+
+:::{.title .outline}
+Four box content (high)
+:::
+
+:::{.maintext .outline}
+Use `.four-content-high` to use this page layout. This is the `.maintext`.
+:::
+
+:::{.content1 .outline}
+```{r 4h_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 4, height = 6)
+```
+:::
+
+:::{.content2 .outline}
+```{r 4h_2, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 4, height = 6)
+```
+:::
+
+:::{.content3 .outline}
+```{r 4h_3, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content3")
+
+insert_svg(p, width = 4, height = 6)
+```
+:::
+
+:::{.content4 .outline}
+```{r 4h_4, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content4")
+
+insert_svg(p, width = 4, height = 6)
+```
+:::
+
+::::
+
+::::{.grid-page .four-col}
+
+:::{.title .outline}
+Four column
+:::
+
+:::{.maintext .outline}
+Use `.four-col` to use this page layout. This is the `.maintext`.
+:::
+
+:::{.content1 .outline}
+```{r 4c_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 3, height = 8)
+```
+:::
+
+:::{.content2 .outline}
+```{r 4c_2, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 3, height = 8)
+```
+:::
+
+:::{.content3 .outline}
+```{r 4c_3, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content3")
+
+insert_svg(p, width = 3, height = 8)
+```
+:::
+
+:::{.content4 .outline}
+```{r 4c_4, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content4")
+
+insert_svg(p, width = 3, height = 8)
+```
+:::
+
+::::
+
+::::{.grid-page .six-content-wide}
+
+:::{.title .outline}
+Six content (wide)
+:::
+
+:::{.maintext .outline}
+Use `.six-content-wide` to use this page layout. This is the `.maintext`.
+:::
+
+:::{.content1 .outline}
+```{r 6w_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content2 .outline}
+```{r 6w_2, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content3 .outline}
+```{r 6w_3, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content3")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content4 .outline}
+```{r 6w_4, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content4")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content5 .outline}
+```{r 6w_5, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content5")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content6 .outline}
+```{r 6w_6, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content6")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+::::
+
+::::{.grid-page .six-content-high}
+
+:::{.title .outline}
+Six content (high)
+:::
+
+:::{.maintext .outline}
+Use `.six-content-high` to use this page layout. This is the `.maintext`.
+:::
+
+:::{.content1 .outline}
+```{r 6h_1, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content1")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content2 .outline}
+```{r 6h_2, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content2")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content3 .outline}
+```{r 6h_3, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content3")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content4 .outline}
+```{r 6h_4, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content4")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content5 .outline}
+```{r 6h_5, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content5")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+:::{.content6 .outline}
+```{r 6h_6, echo=FALSE, warning=FALSE}
+p <- test_plot +
+  labs(title = ".content6")
+
+insert_svg(p, width = 4, height = 4)
+```
+:::
+
+::::
+
+::::{.grid-page .divider}
+
+:::{.panel}
+:::
+
+:::{.title .outline}
+Custom layouts
+:::
+
+::::
+
+::::{.grid-page .demo}
+
+:::{.title .outline}
+Custom layouts
+:::
+
+:::{.start-row-1 .end-row-4 .start-column-5 .end-column-12 .maintext .outline}
+The report template is built on a 12x12 grid. In addition to the set layouts shown before, bespoke layouts can also be constructed using the custom css classes. These are in the format `.start-row-X` and `.end-column-Y`, allowing you to specify the start and end rows and columns for a content box. Bear in mind the `.title` element is a 4x4 box starting in the upper left corner.
+
+A standard `.maintext` element (such as this) occupies rows 1-4 and columns 5-12, to replicate this on a custom page use the classes `.start-row-1 .end-row-4 .start-column-5 .end-column-12 .maintext`, ensure you also include the `.maintext` class so that text flows across two columns.
+:::
+
+:::{.start-row-7 .end-row-9 .start-column-1 .end-column-3 .outline}
+`.start-row-7 .end-row-9 .start-column-1 .end-column-3`
+:::
+
+:::{.start-row-6 .end-row-10 .start-column-6 .end-column-11 .outline}
+`.start-row-6 .end-row-10 .start-column-6 .end-column-11`
+:::
+
+::::
+
+::::{.grid-page .demo}
+
+```{r 12grid, echo=FALSE, warning=FALSE}
+
+div_maker <- function(x) {
+  col <- x %% 12 + 1
+  row <- x %/% 12 + 1
+  htmltools::div(
+    paste0("r", row, "c", col),
+    style = paste0("grid-column: ", col, " / span 1; ",
+                   "grid-row: ", row, " / span 1; ",
+                   "background-color: var(--co-secondary-grey)")
+  )
+}
+
+htmltools::tagList(purrr::map(.x = 0:143, .f = div_maker))
+
+```
+
+::::
