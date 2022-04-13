@@ -29,6 +29,7 @@ insert_svg <- function(gg_plot, width, height) {
   x <- readr::read_lines(svg_file)[-1]
   x <- stringr::str_replace_all(x, " font-family: [\\w\\s]+;", " font-family: Heebo;")
   x <- stringr::str_replace_all(x, "font-weight: bold;", "font-weight: 500;")
+  x <- stringr::str_replace_all(x, " textLength.*spacingAndGlyphs\'", "")
   htmltools::HTML(paste(x, sep = "\n"))
 }
 
