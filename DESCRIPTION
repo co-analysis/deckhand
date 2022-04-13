@@ -1,0 +1,23 @@
+Package: deckhand
+Type: Package
+Title: Create data heavy {pagedown} reports (slide decks)
+Version: 0.0.9
+Author: 
+    c(person(given = "Crown Copyright 2022", role = "cph"),
+      person(given = "Matt", family = "Kerlogue", role = c("aut", "cre"),
+             email = "matt.kerlogue@cabinetoffice.gov.uk"))
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: Generate {pagedown} reports for data heavy publications. Often 
+    these types of reports have been laid out using presentation software and
+    therefore called "slide decks" even though they aren't presented but turned
+    into PDFs and printed. A deckhand is an experienced seaman in the merchant
+    navy who helps with the general running of a ship, the {deckhand} package
+    helps you produce your report.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    ggplot2,
+    gt,
+    pagedown,
+    rmarkdown
