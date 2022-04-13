@@ -1,0 +1,96 @@
+---
+pagetitle: "Report title"
+output:
+  deckhand::co_deck
+---
+
+``` {r setup, include=FALSE}
+library(tidyverse)
+library(deckhand)
+
+knitr::opts_chunk$set(
+  echo = FALSE, warning = FALSE, message = FALSE
+)
+
+```
+
+::::{.grid-page .front-cover}
+
+:::{.security-marking}
+SECURITY-MARKING
+:::
+
+:::{.logo}
+`r co_logo()`
+:::
+
+:::{.title}
+Report title
+:::
+
+:::{.panel}
+:::
+
+:::{.subtitle}
+Report subtitle
+:::
+
+:::{.date}
+DD Month YYYY<br />
+Unit/division, Cabinet Office
+:::
+
+::::
+
+::::{.grid-page .divider}
+
+:::{.panel}
+:::
+
+:::{.title .outline}
+Divider title
+:::
+
+:::{.maintext .outline}
+Use `.divider` to use this page layout. This is the `.maintext` element.
+:::
+
+::::
+
+::::{.grid-page .single-content}
+
+:::{.title .outline}
+Single Content
+:::
+
+:::{.maintext .outline}
+Use `.single-content-wide` to use this page layout. This is the `.maintext` element.
+:::
+
+:::{.secondarytext .outline}
+This is the `.secondarytext` element.
+:::
+
+:::{.content1 .outline}
+```{r 1c, echo=FALSE, warning=FALSE}
+test_plot <- ggplot(
+   palmerpenguins::penguins, 
+   aes(x = flipper_length_mm, y = bill_length_mm)) + 
+  geom_point(
+    aes(colour = species, shape = species),
+    size = 3, alpha = 0.8) +
+  geom_smooth(aes(color = species),
+              method = "lm", formula = y ~ x, se = FALSE) +
+  scale_color_brewer(palette = "Dark2") +
+  labs(
+    title = "Penguin size by species (.content1 element)",
+    x = "Flipper length (mm)",
+    y = "Bill length (mm)"
+  ) +
+  theme_co_report()
+
+insert_svg(p, width = 8, height = 8)
+```
+:::
+
+::::

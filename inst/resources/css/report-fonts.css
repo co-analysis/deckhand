@@ -1,0 +1,12 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@100;300;400;500;700;800;900&display=swap');
+
+body {
+  font-family: "Heebo", "HelveticaNeue-Light", "Helvetica Neue Light",
+    "Helvetica Neue", Helvetica, Arial sans-serif;
+  font-weight: 300;
+}
+
+strong {
+  font--weight: 500 !important;
+}

@@ -1,0 +1,40 @@
+@media print {
+  /* paper size and orientation */
+  @page {
+    size: A4 landscape;
+  }
+
+  /* page break */
+  .level1 {
+    break-before: page;
+  }
+}
+
+/* screen viewer (optional) */
+:root {
+  --background: whitesmoke;
+  --color-paper: white;
+  --color-mbox: rgba(0, 0, 0, 0.2);
+  --screen-pages-spacing: 5mm;
+}
+
+@media screen {
+  body {
+    background-color: var(--background);
+    margin: var(--screen-pages-spacing) auto 0 auto;
+  }
+  .pagedjs_pages {
+    display: flex;
+    flex: 0;
+    flex-wrap: wrap;
+    margin: 0 auto;
+  }
+  .pagedjs_page {
+    max-height: var(--pagedjs-height);
+    background-color: var(--color-paper);
+    box-shadow: 0 0 0 1px var(--color-mbox);
+    flex-shrink: 0;
+    flex-grow: 0;
+    margin: auto auto var(--screen-pages-spacing) auto;
+  }
+}
