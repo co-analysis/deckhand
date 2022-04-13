@@ -27,6 +27,7 @@ insert_svg <- function(gg_plot, width, height) {
   ggplot2::ggsave(svg_file, gg_plot, device = "svg",
                   width = width, height = height, units = "mm")
   x <- readr::read_lines(svg_file)[-1]
+  x <- stringr::str_replace_all(x, " font-family: [\\w\\s]+;", "")
   x <- stringr::str_replace_all(x, "font-weight: bold;", "font-weight: 500;")
   htmltools::HTML(paste(x, sep = "\n"))
 }
@@ -61,6 +62,7 @@ export_plot <- function(gg_plot, filename, width, height) {
   width <-  ((width  * 20) + ((width - 1) * 2)) - 4
   height <- ((height * 12) + ((height - 1) * 2)) - 4
 
+  showtext::showtext_auto()
   ggplot2::ggsave(filename = filename, plot = gg_plot, dev = "png",
                   width = width, height = height, units = "mm")
   message("plot exported as ", filename)

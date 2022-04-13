@@ -3,10 +3,15 @@
 
 body {
   font-family: "Heebo", "HelveticaNeue-Light", "Helvetica Neue Light",
-    "Helvetica Neue", Helvetica, Arial sans-serif;
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 300;
 }
 
 strong {
   font--weight: 500 !important;
+}
+
+svg text {
+  font-family: "Heebo", "HelveticaNeue-Light", "Helvetica Neue Light",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
