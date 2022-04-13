@@ -89,7 +89,7 @@ test_plot <- ggplot(
   ) +
   theme_co_report()
 
-insert_svg(p, width = 8, height = 8)
+insert_svg(test_plot, width = 8, height = 8)
 ```
 :::
 
