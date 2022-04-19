@@ -35,7 +35,7 @@ show_example_report <- function() {
 
   example_report <- paste0(
     "file://",
-    system.file("resources", "html", "co_deck.html", package = "deckhand")
+    system.file("resources", "html", "co_deck_layouts.html", package = "deckhand")
   )
 
   utils::browseURL(example_report)
