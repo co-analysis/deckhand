@@ -29,6 +29,7 @@ Imports:
     rmarkdown,
     showtext,
     stringr,
+    svglite,
     sysfonts,
     tibble,
     tools
