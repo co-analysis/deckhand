@@ -14,6 +14,8 @@ Description: Generate {pagedown} reports for data heavy publications. Often
     navy who helps with the general running of a ship, the {deckhand} package
     helps you produce your report.
 License: MIT + file LICENSE
+URL: https://co-analysis.github.io/deckhand/, https://github.com/co-analysis/deckhand
+BugReports: https://github.com/co-analysis/deckhand/issues
 Encoding: UTF-8
 LazyData: true
 Imports: 
