@@ -1,4 +1,18 @@
 url: https://github.com/co-analysis/deckhand/
+
+template:
+  bootstrap: 5
+  bslib:
+    bg: "#ffffff"
+    fg: "#4d4e53"
+    primary: "#005abb"
+    base_font: {google: "Heebo"}
+    heading_font: {google: "Heebo"}
+    code_font: {google: "Fira Code"}
+
+navbar:
+  bg: primary
+
 reference:
 - title: Rmarkdown
   desc: Use the co_deck output format
