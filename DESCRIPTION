@@ -36,5 +36,6 @@ RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 Suggests: 
     stringi,
-    knitr
+    knitr,
+    palmerpenguins
 VignetteBuilder: knitr
