@@ -1,0 +1,24 @@
+url: https://github.com/co-analysis/deckhand/
+reference:
+- title: Rmarkdown
+  desc: Use the co_deck output format
+- contents:
+  - co_deck
+- title: Chart helpers
+  desc: Use {ggplot2} charts in your report
+- contents:
+  - co_colours
+  - scale_co
+  - theme_co_report
+  - tint_hex
+  - insert_svg
+- title: Table helpers
+  desc: Use {gt} tables in your report
+- contents:
+  - output_table
+- title: Other helpers
+- contents:
+  - co_logo
+  - export_plot
+  - show_co_colours
+  - show_example_report
