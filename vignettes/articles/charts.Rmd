@@ -1,0 +1,105 @@
+---
+title: "Charts and graphics"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The `{deckhand}` package provides a number of functions to help with the creation of charts that work with the `deckhand::co_deck()` Rmarkdown template and associated CSS.
+
+```{r setup}
+library(deckhand)
+library(ggplot2)
+
+test_plot <- ggplot(
+   palmerpenguins::penguins, 
+   aes(x = flipper_length_mm, y = bill_length_mm)) + 
+  geom_point(
+    aes(colour = species, shape = species),
+    size = 3, alpha = 0.8) +
+  geom_smooth(aes(color = species),
+              method = "lm", formula = y ~ x, se = FALSE) +
+  labs(
+    title = "Penguin size by species",
+    x = "Flipper length (mm)",
+    y = "Bill length (mm)"
+  )
+```
+
+## Themes, colours and scales
+
+### theme_co_report
+
+The `theme_co_report()` function provides a theme for `ggplot2::ggplot()` charts. The arguments to the function allow you to modify the position of the legend, whether the legend has a title, and the inclusion of axis text and titles.
+
+```{r, warning=FALSE}
+test_plot +
+  theme_co_report(
+    axis_title = "both"
+  )
+```
+
+### co_colours
+The `{deckhand}` package provides easy access to the Cabinet Office corporate colour palette through the `co_colours` vector.
+
+```{r}
+co_colours
+```
+
+You can display the palette in the RStudio IDE viewer window by calling `show_co_colours()` which produces a simple plot of the colours.
+
+```{r}
+show_co_colours()
+```
+
+### scale_co functions
+You can use `scale_colour_co()` and `scale_fill_co()` to use one of the Cabinet Office's corporate colours as the basis for a series of colour/fill tints.
+
+```{r, warning=FALSE}
+summary_df <- palmerpenguins::penguins |>
+  dplyr::group_by(species) |>
+  dplyr::summarise(bill_length_mm = mean(bill_length_mm, na.rm = TRUE))
+
+ggplot(
+   summary_df, 
+   aes(x = species, y = bill_length_mm, fill = species)) + 
+  geom_col() +
+  labs(
+    title = "Average penguin bill length (mm) by species"
+  ) +
+  scale_fill_co(fill = "orange") +
+  theme_co_report()
+```
+
+## Inserting and exporting plots
+By default knitr (the engine that processes Rmarkdown documents) will render charts as images, using raster PNG images that do not scale well and which the contents of (such as axis text or data labels) cannot be selected. You can set the device options for code chunks to svg/svglite to enable scalable vector image formats. However this will still render inside HTML `<img>` tags making them impossible to select, and when rendered as PDF they will be converted to raster images.
+
+### insert_svg
+To aid the accessibility of output reports and to work effectively with the layout and CSS of the `deckhand::co_deck()` template, you should use the `insert_svg()` function. This bypasses knitr and will insert the SVG code for your chart into the output report so that it is fully scaleable and selectable.
+
+You must pass `insert_svg()` a `ggplot2::ggplot()` chart along with a `width` and `height` relating to the number of columns and rows of the content box that the plot is contained within. Read the [layout article](layout.html) for more details about the underlying grid structure.
+
+```{r, warning=FALSE}
+p <- test_plot +
+  theme_co_report(
+    axis_title = "both"
+  )
+
+insert_svg(p, width = 8, height = 8)
+```
+
+### export_plot
+Occasionally you may want to use a chart from your report in another document, you can export your plots as either SVG or PNG format using the `export_plot()` function. As with `insert_svg()` you must provide a `ggplot2::ggplot()` chart and a `width` and `height` in grid columns/rows, but you must also provide a file name.
+
+```{r, eval=FALSE}
+export_plot(
+  gg_plot = test_plot, 
+  filename = "test_plot.png", 
+  width = 8, height = 8)
+```
+
+If you provide a file name ending in `.svg` the plot will be saved as an SVG image, whereas if you provide any other file name it will be saved as a PNG image (other file extensions such as `.jpg` will be overridden).

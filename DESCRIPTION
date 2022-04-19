@@ -2,7 +2,7 @@ Package: deckhand
 Type: Package
 Title: Create data heavy {pagedown} reports (slide decks)
 Version: 0.0.9
-Author: 
+Authors@R: 
     c(person(given = "Crown Copyright 2022", role = "cph"),
       person(given = "Matt", family = "Kerlogue", role = c("aut", "cre"),
              email = "matt.kerlogue@cabinetoffice.gov.uk"))
@@ -35,5 +35,6 @@ Imports:
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
 Suggests: 
+    stringi,
     knitr
 VignetteBuilder: knitr

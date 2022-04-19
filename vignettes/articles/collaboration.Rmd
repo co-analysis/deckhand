@@ -1,0 +1,80 @@
+---
+title: "Non-R user collaboration"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+As with the discussion on [workflow](workflow.html), this article provides strategies for collaboration with Rmarkdown within Cabinet Office analytical teams and is not specific to the `{deckhand}` package. In particular it discusses how to collaborate on writing the narrative elements of Rmarkdown with those who do not have or use R such as managers or policy colleagues.
+
+The general approach discussed in this article is as follows:
+
+1. Develop a draft of your report
+1. Set up a Google Sheet, stored in the relevant corporate area of the Drive, with at least three columns: `page_id`, `page_title`, `page_text`.
+1. Share an HTML/PDF version of the draft report with colleagues
+1. Work with colleagues to agree titles and narrative text for each page.
+1. Export the Google Sheet as CSV and save in the same folder as the Rmarkdown file
+1. Import the CSV to your Rmarkdown
+1. Insert the text and titles to the relevant pages
+
+This approach will then allow you to iteratively develop the R code elements of the report, while multiple people (including yourself) can edit and comment on the narrative elements of the report together. When there is an update to the text you can simply re-download the Google Sheet and re-render the report.
+
+## Setting up the Google Sheet
+You should set up a Google Sheet to store and edit the narrative text elements of your slides such as the `.title` and `.maintext` elements of each page. If you have pages that make use of the `.secondary-text` element or have additional narrative boxes on the page then ensure you have a sufficient number of columns setup and named.
+
+Here is an example sheet:
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~page_id, ~page_title, ~page_text,
+  "summary", "Our analysis shows that X causes Y", paste0(substr(stringi::stri_rand_lipsum(1), 1, 150), "..."),
+  "page1", "A and B have different outcomes", paste0(substr(stringi::stri_rand_lipsum(1), 1, 150), "..."),
+  "page2", "A's outcomes are due to C", paste0(substr(stringi::stri_rand_lipsum(1), 1, 150), "...")
+) |>
+  gt::gt()
+```
+
+
+## Working with Google Sheets and Rmarkdown
+Having set up the Google Sheet we can download and save the Sheet as a CSV file in the same folder as the Rmarkdown report.
+
+Add the following to your report's setup chunk to read in the sheet and set up vectors that make it easy to access the narrative elements a later stages of your report.
+
+````r
+page_narratives <- readr::read_csv("google_sheet.csv")
+page_titles <- purrr::set_names(
+  x = page_narratives$page_title,
+  nm = page_narratives$page_id
+)
+page_text <- purrr::set_names(
+  x = page_narratives$page_text,
+  nm = page_narratives$page_id
+)
+````
+
+You are then able to simply call the title and text for a page by taking the relevant vector and using the relevant `page_id` to select the specific text of interest.
+
+````{verbatim}
+::::{.grid-page .single-content}
+
+:::{.title}
+`r page_titles["page1"]`
+:::
+  
+:::{.maintext}
+`r page_text["page1"]`
+:::
+
+:::{.content-1}
+```{r}
+my_awesome_chart_function()
+```
+:::
+
+::::
+````
+

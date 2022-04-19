@@ -1,0 +1,166 @@
+---
+title: "Layout and structure"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The CO deck layout allows you to use Rmarkdown to produce landscape A4 report documents. It does this by making use of the {pagedown} package's support for creating "paged HTML" that emulates physical pages, and provides a much more extensible and flexible approach to creating paged content than traditional Rmarkdown formats.
+
+You can [view the example deck](../co_deck_layouts.html) which shows a full range of layouts.
+
+## Page structure
+
+A page is created in your Rmarkdown by creating a grid-page entity `::::{.grid-page .page-type}` where `.page-type` is the layout design you want to use (remember to close off with four colons `::::` before your next page). You can then include page elements such as `:::{.title}`, `:::{.maintext}` and `:::{.content1}`, closing each element with three colons `:::`. To aid code scanning/navigation is recommended using the convention of four colons for the DIV relating to a page and three for elements inside the page. See below for an example.
+
+````{verbatim}
+::::{.grid-page .single-content}
+
+:::{.title}
+My page title
+:::
+
+:::{.maintext}
+The narrative text for the page, goes here.
+:::
+
+:::{.content-1}
+```{r}
+my_awesome_chart_function()
+```
+:::
+
+::::
+````
+
+## In-built layouts
+
+As discussed above you can use `.page-type` to specify one of the default layouts. All default layouts support a `.title` element (which will always be located in the upper left corner of a page) and a `.maintext` element for narrative prose (which position varies based on the layout).
+
+```{r, echo=FALSE}
+tibble::tribble(
+  ~page_type, ~description, ~n_content, ~maintext, ~secondarytext,
+  ".single-content", "A single content box", 1, "Top", TRUE,
+  ".single-content-wide", "A single content box, spanning the page width", 1, "Top,", TRUE,
+  ".single-content-high", "A single content box, spanning the page height", 1, "Left", FALSE,
+  ".two-col", "A two column layout", 2, "Top", TRUE,
+  ".two-col-wide", "A two column layout, spanning the page width", 2, "Top", FALSE,
+  ".two-row", "A two row layout", 2, "Top", TRUE,
+  ".two-row-high", "A two row layout, spanning the page height", 2, "Left", FALSE,
+  ".three-col", "A three column layout", 3, "Top", FALSE,
+  ".three-row", "A three row layout", 3, "Left", FALSE,
+  ".three-row-small", "A three row layout with small content boxes", 3, "Middle", TRUE,
+  ".four-content", "Four content boxes in a two-by-two layout", 4, "Top", TRUE,
+  ".four-content-wide", "Four content layout, spanning the page width", 4, "Top", FALSE,
+  ".four-content-high", "Four content layout, spanning the page height", 4, "Left", FALSE,
+  ".four-column", "A four column layout, spanning the page width", 4, "Top", FALSE,
+  ".six-content-widee", "Six content boxes in a three-by-two layout, spanning the page width", 6, "Top", FALSE,
+  ".six-content-high", "Six content boxes in a two-by-three layout, spanning the page height", 6, "Left",  FALSE
+  ) |>
+  gt::gt() |>
+  gt::fmt(
+    columns = secondarytext,
+    fns = function(x) {
+      ifelse(x, "✔️", "❌")
+    }
+  ) |>
+  gt::cols_label(
+    "page_type" = ".page-type class",
+    "description" = "Description",
+    "n_content" = "# of content boxes",
+    "maintext" = ".maintext position",
+    "secondarytext" = "Supports .secondary-text"
+  )
+```
+
+There are also three special page layouts: `.front-cover`, `.divider` and `.notes-page`.
+
+### .front-cover
+The `.front-cover` layout is for the first page of your report, it should have the following structure:
+
+```{verbatim}
+::::{.grid-page .front-cover}
+
+:::{.security-marking}
+SECURITY-MARKING
+:::
+
+:::{.logo}
+`r deckhand::co_logo()`
+:::
+
+:::{.title}
+Report title
+:::
+
+:::{.panel}
+:::
+
+:::{.subtitle}
+Report subtitle
+:::
+
+:::{.date}
+DD Month YYYY<br />
+Team Name, Cabinet Office
+:::
+
+::::
+```
+
+The `.security-marking` element is optional, when included the text inside the section will be repeated as the security marking header on every page of the report. For example if the resulting report is to be marked as "OFFICIAL-SENSITIVE" then writing this in the `.security-marking` will have that repeated on every page.
+
+The `.logo` element is for inserting the organisation logo, the `deckhand::co_logo()` will insert the Cabinet Office's logo for you. If using a custom logo it is recommended that you provide an SVG file so that it can scale appropriately.
+
+The `.title` and `.subtitle` elements on the front cover are used to generate the footer content on subsequent pages in the report (except divider pages).
+
+### .divider
+
+The `.divider` page provides a way of clearly marking out new sections, it should have the following structure:
+
+```{verbatim}
+::::{.grid-page .divider}
+
+:::{.title}
+My section title
+:::
+
+:::{.maintext}
+An introduction to or summary of the section.
+:::
+
+::::
+```
+
+### .notes-page
+
+The `.notes-page` is intended for Annexes, it should have the following structure:
+
+```{verbatim}
+::::{.grid-page .notes-page}
+
+:::{.title}
+Notes page
+:::
+
+:::{.maintext}
+Notes text.
+:::
+
+::::
+```
+
+The `.title` and `.maintext` elements on the notes page will span the width of the page.
+
+
+## Custom layouts
+
+The report template is built on a 12 row by 12 column grid. In addition to the in-built layouts, bespoke layouts can also be constructed using the custom CSS classes. These are in the format `.start-row-X` and `.end-column-Y`, allowing you to specify the start and end rows and columns for a content box. Bear in mind the `.title` element is a 4-by-4 box starting in the upper left corner, this is hard-coded into the CSS for the title element.
+
+A standard `.maintext` element (such as this) occupies rows 1-4 and columns 5-12, to replicate this on a custom page use the classes `.start-row-1 .end-row-4 .start-column-5 .end-column-12 .maintext`, ensure you also include the `.maintext` class so that text flows across two columns.
+
+If you are developing your report and want to see the shape of built-in or custom-layout elements you can add the `.outline` class to provide a border, this should not be included in final versions of your report.

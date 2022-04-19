@@ -1,0 +1,133 @@
+---
+title: "Workflow"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The `deckhand::co_deck()` layout can be used like any other Rmarkdown template. This article provides strategies for Rmarkdown workflows within Cabinet Office analytical teams and is not specific to the `{deckhand}` package.
+
+In general the following workflow is advised to protect against accidental inclusion of raw/sensitive data (e.g. individual level data) in your reports:
+
+1. Process raw/sensitive data into summary tables
+1. Save summary tables to an RDS file
+1. Read in the RDS at the start of your Rmarkdown
+1. Use code chunks to turn summary tables into output (e.g. charts/tables)
+1. Render Rmarkdown to PDF via pagedown
+
+## Rendering to HTML and PDF using {pagedown}
+
+The `deckhand::co_deck()` layout is a scaffold around `pagedown::html_paged()` that produces from Rmarkdown an HTML document that simulates physical pages. Using the Knit command inside the RStudio IDE or a call to `rmarkdown::render()` produces the HTML.
+
+However, it is often desired/required to provide others with PDF versions of reports. To facilitate this you can use the `pagedown::chrome_print()` command, which renders the Rmarkdown and HTML and then uses a background instance of Chrome to save the HTML file as a PDF.
+
+
+## Workflow example
+
+This is a fictional example of working with data from the [Civil Service People Survey](https://www.gov.uk/government/collections/civil-service-people-survey-hub), the code below is not functional and will not run with the actual datasets.
+
+Let's assume we have an RStudio project for People Survey analysis, within that project we have a folder for each separate piece of analysis/report. Our folder for our example report contains the following files:
+
+```{verbatim}
+people_survey_analysis
+ ├ 2021-12_old-report
+ └ 2022-04_new-report
+    ├ 01_data.R
+    ├ 2020-04_analysis.RDS
+    ├ 2020-04_report.html
+    ├ 2020-04_report.pdf
+    └ 2020-04_report.Rmd
+```
+
+The `01_data.R` file is a script where we wrangle, analyse and summarise the raw microdata for the survey. The output of this script is the `2020-04_analysis.RDS` file which stores the processed microdata.
+
+The `2020-04_report.Rmd` is our `deckhand::co_deck()` Rmarkdown file, as a result of knitting the Rmd we have the `2020-04_report.html` file and and using `pagedown::chrome_print()` produces the `2020-04_report.pdf` file.
+
+### 01_data.R and the RDS file
+There are two reasons for why the microdata is processed in a separate script.
+
+First, and most importantly, this approach minimises the risk of sensitive/personal data being included in the output report. If the microdata is loaded by the Rmarkdown file there is a risk that you may accidentally include the microdata or an extract of it in the output report.
+
+Second, this approach makes itterating the development of your report much easier. Our internal microdata files are generally quite large and loading them each time you want to work on the report or re-knit the Rmardkown document are time consuming, especially if you have already extracted your data and are making layout/cosmetic changes.
+
+The main aim is to analyse your data and save all of the necessary summary tables for your report into a list that is then saved as a single RDS file.
+
+```r
+# My data analysis script
+# 2020-04-01
+
+my_tables <- list()
+
+# load raw data
+csps2020_raw <- readr::read_csv("path/to/raw/2020data.csv")
+csps2021_raw <- readr::read_csv("path/to/raw/2021data.csv")
+
+# engagement index by grade
+
+ees_grade <- csps2021_raw %>%
+  dplyr::group_by(grade) %>%
+  dplyr::summarise(ees = mean(ees, na.rm = TRUE),
+                   .groups = "drop") %>%
+  dplyr::mutate(year = 2021) %>%
+  dplyr::bind_rows(
+    csps2020_raw %>%
+      dplyr::group_by(grade) %>%
+      dplyr::summarise(ees = mean(ees, na.rm = TRUE),
+                       .groups = "drop") %>%
+      dplyr::mutate(year = 2020)
+  )
+
+my_tables$ees_grade <- ees_grade
+
+# more code
+
+readr::write_rds(my_tables, "2020_04_analysis.RDS")
+
+```
+
+
+### 2020_04_report.Rmd (and html and pdf)
+
+If the separate data processing script and RDS approach listed above to use this in your Rmarkdown document you should load the RDS file in the setup chunk as follows.
+
+
+````{verbatim}
+---
+pagetitle: "Report title"
+output:
+  deckhand::co_deck
+---
+
+``` {r setup, include=FALSE}
+library(tidyverse)
+library(deckhand)
+
+knitr::opts_chunk$set(
+  echo = FALSE, warning = FALSE, message = FALSE
+)
+
+my_tables <- readr::read_rds("2020_04_analysis.R")
+
+```
+
+::::{.grid-page .front-cover}
+````
+
+You can then access the individual summary tables to produce output charts and tables.
+
+````{verbatim}
+:::{.content2}
+p <- ggplot2::ggplot(
+  my_tables$ees_grade, 
+  ggplot2::aes(x = grade, y = value, fill = year)) +
+  geom_col(position = "dodge")
+  
+insert_svg(p, width = 4, hight = 8)
+:::
+````
+
+While you can regularly knit the Rmarkdown report to HTML and view the development of the report, it is recommended that you periodically use `pagedown::chrome_print()` to generate the end PDF as there can be discrepancies between how the HTML is rendered in a browser and how Chrome exports the HTML to PDF.

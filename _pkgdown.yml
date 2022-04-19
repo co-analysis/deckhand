@@ -22,3 +22,20 @@ reference:
   - export_plot
   - show_co_colours
   - show_example_report
+
+articles:
+- title: Working with deckhand
+  desc: >
+    Using the deckhand Rmarkdown template, its layout and structure,
+    suggested approaches for workflow and collaboration.
+  navbar: "Fundamentals"
+  contents:
+  - articles/workflow
+  - articles/layout
+  - articles/collaboration
+- title: Including charts and tables
+  desc: >
+    How to create charts and tables that work with the deckhand template.
+  navbar: Charts and tables
+  contents:
+  - articles/charts
