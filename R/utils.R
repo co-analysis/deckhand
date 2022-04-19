@@ -41,3 +41,33 @@ show_example_report <- function() {
   utils::browseURL(example_report)
 
 }
+
+# internal function to rebuild example report
+render_example_report <- function(quiet = TRUE, overwrite = TRUE) {
+
+  tmp_file = tempfile()
+
+  # knit file
+  rmarkdown::render(
+    input = "vignettes/articles/_co_deck.Rmd",
+    output_file = tmp_file,
+    quiet = quiet
+  )
+
+  # copy to inst/resources
+  file.copy(
+    paste0(tmp_file,".html"),
+    "inst/resources/html/co_deck_layouts.html",
+    overwrite = overwrite
+  )
+
+  # copy to pkgdown assets
+  file.copy(
+    paste0(tmp_file,".html"),
+    "pkgdown/assets/co_deck_layouts.html",
+    overwrite = overwrite
+  )
+
+  message("Example report knited and copied")
+
+}
