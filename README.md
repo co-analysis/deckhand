@@ -21,6 +21,7 @@ You create a page in your Rmarkdown document by using fenced DIV elements, which
 
 A page is created in your Rmarkdown by creating a grid-page entity `::::{.grid-page .page-type}` where `.page-type` is the layout design you want to use (remember to close off with four colons `::::` before your next page).You can then include page elements such as `:::{.title}`, `:::{.maintext}` and `:::{.content1}`, closing each element with `:::`. To aid code scanning/navigation is recommended using the convention of four colons for the DIV relating to a page and three for elements inside the page. See below for an example.
 
+
 ````r
 ::::{.grid-page .single-content}
 
@@ -28,13 +29,13 @@ A page is created in your Rmarkdown by creating a grid-page entity `::::{.grid-p
 My page title
 :::
 
-:::{.title}
-My page title
+:::{.maintext}
+The narrative text for the page, goes here.
 :::
 
 :::{.content-1}
-```r
-code for my awesome chart
+```{r}
+my_awesome_chart_function()
 ```
 :::
 
@@ -58,3 +59,5 @@ In addition to the Rmarkdown template and output format, {deckhand} also provide
 The Cabinet Office corporate colour palette is also available via the vector `co_colours`
 
 ![The Cabinet Office colour palette](https://github.com/co-analysis/deckhand/raw/main/man/figures/co_colours.png)
+
+To understand the full range of features see the package documentation website.
