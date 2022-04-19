@@ -1,6 +1,8 @@
 ---
 pagetitle: "CO deck example"
 output: deckhand::co_deck
+pkgdown:
+  as_is: true
 ---
 
 ``` {r setup, include=FALSE}
@@ -52,7 +54,7 @@ Report subtitle
 
 :::{.date}
 DD Month YYYY<br />
-Analysis & Insight, Cabinet Office
+Team Name, Cabinet Office
 :::
 
 ::::
@@ -128,7 +130,7 @@ Single Content
 :::
 
 :::{.maintext .outline}
-Use `.single-content-wide` to use this page layout. This is the `.maintext` element.
+Use `.single-content` to use this page layout. This is the `.maintext` element.
 :::
 
 :::{.secondarytext .outline}
@@ -765,6 +767,20 @@ p <- test_plot +
 
 insert_svg(p, width = 4, height = 4)
 ```
+:::
+
+::::
+
+::::{.grid-page .notes-page}
+
+:::{.title .outline}
+Notes page
+:::
+
+:::{.maintext .outline}
+There is also a notes page layout, intended for Annexes, with a title across the top and the `.maintext` element spanning the page.
+
+`r paste0(stringi::stri_rand_lipsum(5), collapse = "\\n\\n")`
 :::
 
 ::::
