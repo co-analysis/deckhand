@@ -17,5 +17,6 @@ export_plot(gg_plot, filename, width, height)
 }
 \description{
 Export report plots with a sizing similar to that of the plot created by
-\code{\link[=insert_svg]{insert_svg()}}. Plots are exported as png, file names will be coerced as necessary.
+\code{\link[=insert_svg]{insert_svg()}}. Plots are exported as SVG if the file extension is \code{.svg}
+otherwise they are exported in PNG format.
 }

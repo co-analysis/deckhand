@@ -36,7 +36,8 @@ insert_svg <- function(gg_plot, width, height) {
 #' Export report plot as PNG
 #'
 #' Export report plots with a sizing similar to that of the plot created by
-#' [insert_svg()]. Plots are exported as png, file names will be coerced as necessary.
+#' [insert_svg()]. Plots are exported as SVG if the file extension is `.svg`
+#' otherwise they are exported in PNG format.
 #'
 #' @param gg_plot The ggplot to render
 #' @param filename The file to export
@@ -46,9 +47,14 @@ insert_svg <- function(gg_plot, width, height) {
 #' @export
 export_plot <- function(gg_plot, filename, width, height) {
 
-  if (tolower(tools::file_ext(filename)) != "png") {
+  if (tolower(tools::file_ext(filename)) == "svg") {
+    out_dev <- "svg"
+  } else if (tolower(tools::file_ext(filename)) != "png") {
     filename <- gsub(paste0("\\.", tools::file_ext(filename),"$"), ".png", filename)
+    out_dev <- "png"
     warning("filename was not a png, renamed")
+  } else {
+    out_dev <- "png"
   }
 
   if (width > 12 | width < 1) {
@@ -63,9 +69,16 @@ export_plot <- function(gg_plot, filename, width, height) {
   width <-  ((width  * 20) + ((width - 1) * 2)) - 4
   height <- ((height * 12) + ((height - 1) * 2)) - 4
 
-  showtext::showtext_auto()
-  ggplot2::ggsave(filename = filename, plot = gg_plot, dev = "png",
+
+  if (out_dev == "png") {
+    showtext::showtext_begin()
+  }
+  ggplot2::ggsave(filename = filename, plot = gg_plot, dev = out_dev,
                   width = width, height = height, units = "mm")
+  if (out_dev == "png") {
+    showtext::showtext_end()
+  }
+
   message("plot exported as ", filename)
 
 }
