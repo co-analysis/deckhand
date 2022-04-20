@@ -6,8 +6,12 @@ description: "Insert charts into your deckhand report"
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.showtext = TRUE
 )
+
+# force registration of Heebo for pkgdown build
+deckhand:::.setup_fonts()
 ```
 
 The `{deckhand}` package provides a number of functions to help with the creation of charts that work with the `deckhand::co_deck()` Rmarkdown template and associated CSS.
