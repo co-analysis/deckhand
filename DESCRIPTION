@@ -3,7 +3,7 @@ Type: Package
 Title: Create data heavy {pagedown} reports (slide decks)
 Version: 0.0.9
 Authors@R: 
-    c(person(given = "Crown Copyright 2022", role = "cph"),
+    c(person(given = "Crown Copyright", role = c("cph", "fnd")),
       person(given = "Matt", family = "Kerlogue", role = c("aut", "cre"),
              email = "matt.kerlogue@cabinetoffice.gov.uk"))
 Maintainer: The package maintainer <yourself@somewhere.net>

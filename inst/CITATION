@@ -1,0 +1,16 @@
+citHeader("To cite deckhand in publications use:")
+
+citEntry(
+  entry = "Manual",
+  title = "deckhand: Create data heavy pagedown reports",
+  author =  person(given = "Matt", family = "Kerlogue", role = c("aut", "cre"), email = "matt.kerlogue@cabinetoffice.gov.uk"),
+  year = "2022",
+  organization = "Crown Copyright (Cabinet Office)",
+  url = "https://github.com/co-analysis/deckhand",
+  textVersion = paste(
+    "Kerlogue M (2022)",
+    "deckhand: Create data heavy pagedown reports,",
+    "Crown Copyright (Cabinet Office),",
+    "https://github.com/co-analysis/deckhand"
+  )
+)
