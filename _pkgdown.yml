@@ -10,6 +10,15 @@ template:
 
 navbar:
   bg: primary
+  structure:
+    left: [articles, reference]
+
+footer:
+  structure:
+    left: legal
+    right: built_with
+  components:
+    legal: © Crown Copyright, 2022, Cabinet Office
 
 reference:
 - title: Rmarkdown
