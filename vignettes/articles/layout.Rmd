@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 
 The CO deck layout allows you to use Rmarkdown to produce landscape A4 report documents. It does this by making use of the {pagedown} package's support for creating "paged HTML" that emulates physical pages, and provides a much more extensible and flexible approach to creating paged content than traditional Rmarkdown formats.
 
-You can view the example deck in [HTML](../co_deck_layouts.html) or [PDF](../co_deck_layouts.pdf) which shows a full range of layouts.
+You can view the example deck, which shows a full range of layouts, in [HTML (3.9MB)](../co_deck_layouts.html) or [PDF (2.7MB)](../co_deck_layouts.pdf).
 
 ## Page structure
 
