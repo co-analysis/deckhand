@@ -4,9 +4,18 @@
 \alias{show_example_report}
 \title{Open example report in the browser}
 \usage{
-show_example_report()
+show_example_report(type = c("html", "pdf"), location = c("web", "local"))
+}
+\arguments{
+\item{type}{Either \code{html} (the default) or \code{pdf}}
+
+\item{location}{Either \code{web} (the default) or \code{local}}
 }
 \description{
-An example report showing layout options is provided in the package. This
-function loads the report in your browser
+View the example report
+}
+\examples{
+\dontrun{
+show_example_report()
+}
 }
