@@ -1,5 +1,8 @@
 ---
 title: "Layout and structure"
+description: >
+  How to write a deckhand report and work with the
+  in-built deckhand CSS layouts
 ---
 
 ```{r, include = FALSE}

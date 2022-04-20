@@ -1,5 +1,6 @@
 ---
 title: "Charts and graphics"
+description: "Insert charts into your deckhand report"
 ---
 
 ```{r, include = FALSE}

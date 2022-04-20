@@ -1,5 +1,8 @@
 ---
 title: "Workflow"
+description: >
+  Recommended approach for developing a deckhand report,
+  particularly when working with sensitive data
 ---
 
 ```{r, include = FALSE}

@@ -1,5 +1,8 @@
 ---
 title: "Output quality tables"
+description: >
+  Working with gt to insert output quality tables into
+  your deckhand report
 ---
 
 ```{r, include = FALSE}
