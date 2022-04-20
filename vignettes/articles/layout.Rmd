@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 
 The CO deck layout allows you to use Rmarkdown to produce landscape A4 report documents. It does this by making use of the {pagedown} package's support for creating "paged HTML" that emulates physical pages, and provides a much more extensible and flexible approach to creating paged content than traditional Rmarkdown formats.
 
-You can [view the example deck](../co_deck_layouts.html) which shows a full range of layouts.
+You can view the example deck in [HTML](../co_deck_layouts.html) or [PDF](../co_deck_layouts.pdf) which shows a full range of layouts.
 
 ## Page structure
 
@@ -45,7 +45,7 @@ As discussed above you can use `.page-type` to specify one of the default layout
 tibble::tribble(
   ~page_type, ~description, ~n_content, ~maintext, ~secondarytext,
   ".single-content", "A single content box", 1, "Top", TRUE,
-  ".single-content-wide", "A single content box, spanning the page width", 1, "Top,", TRUE,
+  ".single-content-wide", "A single content box, spanning the page width", 1, "Top", TRUE,
   ".single-content-high", "A single content box, spanning the page height", 1, "Left", FALSE,
   ".two-col", "A two column layout", 2, "Top", TRUE,
   ".two-col-wide", "A two column layout, spanning the page width", 2, "Top", FALSE,
@@ -74,7 +74,12 @@ tibble::tribble(
     "n_content" = "# of content boxes",
     "maintext" = ".maintext position",
     "secondarytext" = "Supports .secondary-text"
-  )
+  ) |>
+  gt::cols_align(
+    align = "center",
+    columns = c("n_content", "maintext", "secondarytext")
+  ) |>
+  deckhand::output_table()
 ```
 
 There are also three special page layouts: `.front-cover`, `.divider` and `.notes-page`.
