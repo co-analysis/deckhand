@@ -1,5 +1,5 @@
 # deckhand
-The `{deckhand}` package is a wrapper around the [{pagedown}](https://pagedown.rbind.io/) package to enable you to make reports in Rmarkdown that align (broadly) with the Cabinet Office’s corporate identity guidelines.
+The `{deckhand}` package is a wrapper around the [{pagedown}](https://pagedown.rbind.io/) package to enable you to make reports in Rmarkdown that align (broadly) with the Cabinet Office’s corporate identity guidelines[^1].
 
 Often data heavy reports have been laid out using presentation software and therefore called "slide decks" even though they aren't presented but usually turned into PDFs and printed. A deckhand is an experienced seaman in the merchant navy who helps with the general running of a ship, the `{deckhand}` package helps you produce your report.
 
@@ -22,7 +22,7 @@ You create a page in your Rmarkdown document by using fenced DIV elements, which
 A page is created in your Rmarkdown by creating a grid-page entity `::::{.grid-page .page-type}` where `.page-type` is the layout design you want to use (remember to close off with four colons `::::` before your next page).You can then include page elements such as `:::{.title}`, `:::{.maintext}` and `:::{.content1}`, closing each element with `:::`. To aid code scanning/navigation is recommended using the convention of four colons for the DIV relating to a page and three for elements inside the page. See below for an example.
 
 
-````r
+````txt
 ::::{.grid-page .single-content}
 
 :::{.title}
@@ -44,8 +44,8 @@ my_awesome_chart_function()
 
 There is also a layout for the report's front cover and for divider pages.
 
-![An example covering page](https://github.com/co-analysis/deckhand/raw/main/man/figures/co_deck_cover.png)
-![An example content page](https://github.com/co-analysis/deckhand/raw/main/man/figures/co_deck_example.png)
+![Front cover example](man/figures/co_deck_cover.png)
+![Cotent page example](man/figures/co_deck_example.png)
 
 You can see a full example of all layouts by calling `deckhand::show_example_report()`, which will open an example in your default browser.
 
@@ -58,6 +58,6 @@ In addition to the Rmarkdown template and output format, {deckhand} also provide
 
 The Cabinet Office corporate colour palette is also available via the vector `co_colours`
 
-![The Cabinet Office colour palette](https://github.com/co-analysis/deckhand/raw/main/man/figures/co_colours.png)
+<img src="man/figures/co_colours.png" alt="The Cabinet Office colour palette"/>
 
-To understand the full range of features see the package documentation website.
+[^1]: The only major deviation from the Cabinet Office's corporate identity guidelines is the use of the [Heebo font](https://fonts.google.com/specimen/Heebo), served via Google Fonts (and embedded within the package). The Cabinet Office's corporate font is Helvetica Neue (replaced by Arial when not available), as a mixed IT environment with Mac devices (which have Helvetica Neue pre-installed) and Windows devices (which do not) Heebo has been selected to provide cross-platform compatability while retaining close similarity to Helvetica Neue.
