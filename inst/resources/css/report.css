@@ -466,6 +466,7 @@ p {
 .three-row-small .maintext {
   grid-column: 5 / span 4;
   grid-row: 1 / span 12;
+  column-count: 1 !important;
 }
 
 .three-row-small .secondarytext {
@@ -903,6 +904,7 @@ table {
 
 th {
   font-weight: 500;
+  border-bottom: 1px solid var(--co-primary-grey);
 }
 
 td, th {
@@ -973,4 +975,16 @@ tbody.tbl-small {
 
 tbody.tbl-small > td {
   font-size: 8pt;
+}
+
+th.gt_left, td.gt_left {
+  text-align: left !important;
+}
+
+th.gt_center, td.gt_center {
+  text-align: center !important;
+}
+
+th.gt_right, td.gt_right {
+  text-align: right !important;
 }

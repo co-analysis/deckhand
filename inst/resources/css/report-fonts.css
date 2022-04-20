@@ -8,7 +8,7 @@ body {
 }
 
 strong {
-  font--weight: 500 !important;
+  font-weight: 500 !important;
 }
 
 svg text {
