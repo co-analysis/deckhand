@@ -27,18 +27,33 @@ co_logo <- function(out = c("html", "path")) {
 
 #' Open example report in the browser
 #'
-#' An example report showing layout options is provided in the package. This
-#' function loads the report in your browser
+#' View the example report
+#'
+#' @param type Either `html` (the default) or `pdf`
+#' @param location Either `web` (the default) or `local`
 #'
 #' @export
-show_example_report <- function() {
+#' @examples
+#' \dontrun{
+#' show_example_report()
+#' }
+show_example_report <- function(type = c("html", "pdf"),
+                                location = c("web", "local")) {
 
-  example_report <- paste0(
-    "file://",
-    system.file("resources", "html", "co_deck_layouts.html", package = "deckhand")
-  )
+  type <- match.arg(type)
+  location <- match.arg(location)
 
-  utils::browseURL(example_report)
+  file_name <- paste("co_deck_layouts", type, sep = ".")
+
+  if (location == "web") {
+    url <- paste0("https://co-analysis.github.io/deckhand/", file_name)
+  } else {
+    url <- system.file(
+      "resources", "html", file_name
+    )
+  }
+
+  utils::browseURL(url)
 
 }
 
@@ -48,26 +63,51 @@ render_example_report <- function(quiet = TRUE, overwrite = TRUE) {
   tmp_file = tempfile()
 
   # knit file
-  rmarkdown::render(
-    input = "vignettes/articles/_co_deck.Rmd",
+  r_file <- rmarkdown::render(
+    input = "vignettes/articles/_co_deck_layouts.Rmd",
     output_file = tmp_file,
     quiet = quiet
   )
 
+  message("Example rendered to HTML")
+
+  # render HTML to pdf
+  if (quiet) {
+    verbose <- 0
+  } else {
+    verbose <- 1
+  }
+
+  p_file <- pagedown::chrome_print(
+    r_file, wait = 2, verbose = verbose, timeout = 360
+  )
+
+  message("Example printed to PDF")
+
   # copy to inst/resources
   file.copy(
-    paste0(tmp_file,".html"),
+    r_file,
     "inst/resources/html/co_deck_layouts.html",
+    overwrite = overwrite
+  )
+  file.copy(
+    p_file,
+    "inst/resources/html/co_deck_layouts.pdf",
     overwrite = overwrite
   )
 
   # copy to pkgdown assets
   file.copy(
-    paste0(tmp_file,".html"),
+    r_file,
     "pkgdown/assets/co_deck_layouts.html",
     overwrite = overwrite
   )
+  file.copy(
+    p_file,
+    "pkgdown/assets/co_deck_layouts.pdf",
+    overwrite = overwrite
+  )
 
-  message("Example report knited and copied")
+  message("Example HTML and PDF copied")
 
 }

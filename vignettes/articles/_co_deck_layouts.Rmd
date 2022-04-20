@@ -780,7 +780,25 @@ Notes page
 :::{.maintext .outline}
 There is also a notes page layout, intended for Annexes, with a title across the top and the `.maintext` element spanning the page.
 
-`r paste0(stringi::stri_rand_lipsum(5), collapse = "\\n\\n")`
+```{r}
+ipsum <- stringi::stri_rand_lipsum(6) |>
+  stringr::str_split( "\\.") |>
+  purrr::as_vector() |>
+  stringr::str_remove("^ ") |>
+  (\(x) x[x != ""])()
+
+htmltools::tagList(
+ htmltools::tags$p(paste0(ipsum[1:5], ".", collapse = " ")),
+ htmltools::tags$p(paste0(ipsum[6:10], ".", collapse = " ")),
+ htmltools::tags$p(paste0(ipsum[11:15], ".", collapse = " ")),
+ htmltools::tags$p(paste0(ipsum[16:20], ".", collapse = " ")),
+ htmltools::tags$p(paste0(ipsum[21:25], ".", collapse = " ")),
+ htmltools::tags$p(paste0(ipsum[26:30], ".", collapse = " ")),
+ htmltools::tags$p(paste0(ipsum[31:35], ".", collapse = " ")),
+ htmltools::tags$p(paste0(ipsum[36:40], ".", collapse = " ")),
+ htmltools::tags$p(paste0(ipsum[41:45], ".", collapse = " "))
+)
+```
 :::
 
 ::::
