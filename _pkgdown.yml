@@ -51,3 +51,4 @@ articles:
   navbar: Charts and tables
   contents:
   - articles/charts
+  - articles/tables

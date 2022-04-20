@@ -1,0 +1,206 @@
+---
+title: "Output quality tables"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The `{gt}` package has been developed to make it easy to turn data.frame and tidyverse tibble datasets into output quality tables, with a useful array of functions to help with formatting, structure and adding supporting elements to tables (such as headings and source notes). You are strongly advised to look at the `{gt}` package documentation.
+
+The `{deckhand}` package includes the `output_table()` function to enable `{gt}` pipelines to work seemlessly with the `{deckhand}` CSS as well as providing access to some styling options.
+
+```{r setup}
+library(deckhand)
+library(gt)
+
+small_df <- palmerpenguins::penguins |>
+  dplyr::mutate(
+    penguin_id = paste("Penguin", dplyr::row_number(), sep = " #")
+  ) |>
+  tidyr::drop_na() |>
+  dplyr::group_by(species) |>
+  dplyr::sample_n(3) |>
+  dplyr::ungroup() |>
+  dplyr::select(penguin_id, species, bill_length_mm, 
+                flipper_length_mm, body_mass_g)
+
+small_df
+```
+
+
+## Simple {gt} and output_table() integration
+At its simplest you can pipe your data.frame into `gt::gt()` and then pass this directly to `output_table()`.
+
+```{r}
+small_df |>
+  gt::gt() |>
+  output_table()
+```
+
+You can also use the various `{gt}` helper functions to design and layout your table as desired. Depending on number formatting you may find that the `{scales}` package works more clearly with `output_table()` than the `{gt}` packages `fmt_*()` functions, this is particularly the case for percentages where `scales::percent()` must be used before you pass the data.frame to `gt::gt()`.
+
+```{r}
+small_out <- small_df |>
+  gt::gt(rowname_col = "penguin_id") |>
+  gt::tab_header("Size of penguins") |>
+  gt::cols_label(
+    "species" = "Species",
+    "bill_length_mm" = "Bill length (mm)",
+    "flipper_length_mm" = "Flipper length (mm)",
+    "body_mass_g" = "Body mass (g)"
+  ) |>
+  gt::cols_align(align = "left", columns = "species") |>
+  gt::cols_align(align = "center", columns = "flipper_length_mm") |>
+  gt::fmt_integer(columns = "body_mass_g")
+
+small_out |>
+  output_table()
+```
+
+
+## Additional output_table() options
+The `output_table()` function includes some additional features to further help with table styling.
+
+### Unique ID
+If you want to explicitly style a particular table you can supply a unique `id` for your table, you can then use your own custom CSS to modify the styling of that table
+
+```{r}
+small_out |>
+  output_table(id = "example-table")
+```
+
+### Highlighting min/max cells
+The `{deckhand}` CSS includes classes to provide cell highlighting for highest and lowest values, you do this by setting `min_max_styling = TRUE` and adding the flags `!!min!!` and `!!max!!` to the cells you want highlighted.
+
+First you need to add the min/max flags, you can use `dplyr::case_when()` to set these, as you will be creating a character vector you will also need to coerce the unaffected values to a character form (the `{scales}` package has useful functions for this).
+
+```{r}
+small_df |>
+  dplyr::mutate(
+    bill_length2 = dplyr::case_when(
+      bill_length_mm == max(bill_length_mm) ~ 
+        paste(bill_length_mm, "!!max!!"),
+      bill_length_mm == min(bill_length_mm) ~ 
+        paste(bill_length_mm, "!!min!!"),
+      TRUE ~ 
+        scales::comma(bill_length_mm, accuracy = 0.1)
+    )
+  ) |>
+  dplyr::select(penguin_id, bill_length_mm, bill_length2)
+```
+
+To apply the styling you then set the `min_max_styling` argument of `output_table()` to TRUE.
+
+```{r}
+small_df |>
+  dplyr::mutate(
+    bill_length2 = dplyr::case_when(
+      bill_length_mm == max(bill_length_mm) ~ 
+        paste(scales::comma(bill_length_mm, accuracy = 0.1), "!!max!!"),
+      bill_length_mm == min(bill_length_mm) ~ 
+        paste(scales::comma(bill_length_mm, accuracy = 0.1), "!!min!!"),
+      TRUE ~ 
+        scales::comma(bill_length_mm, accuracy = 0.1)
+    )
+  ) |>
+  dplyr::select(penguin_id, bill_length2) |>
+  gt::gt() |>
+  output_table(min_max_styling = TRUE)
+```
+
+You can also easily apply this styling column- or row-wise across a table by first pivoting your data.frame into long format and applying the styling conditionally by column or row variable (row-wise requires a unique row id is present in the data).
+
+#### Column-wise styling
+
+```{r}
+small_df |>
+  tidyr::pivot_longer(cols = c(-penguin_id, -species)) |>
+  dplyr::group_by(name) |>
+  dplyr::mutate(
+    value = dplyr::case_when(
+      value == max(value) ~ 
+        paste(scales::comma(value, accuracy = 0.1), "!!max!!"),
+      value == min(value) ~ 
+        paste(scales::comma(value, accuracy = 0.1), "!!min!!"),
+      TRUE ~ 
+        scales::comma(value, accuracy = 0.1)
+    )
+  ) |>
+  dplyr::ungroup() |>
+  tidyr::pivot_wider(names_from = name, values_from = value) |>
+  gt::gt() |>
+  output_table(min_max_styling = TRUE)
+```
+
+
+#### Row-wise styling
+```{r}
+tibble::tibble(
+    penguin_id = paste("Penguin", 1:10, sep = " #"),
+    var1 = runif(10, 20, 40),
+    var2 = runif(10, 20, 40),
+    var3 = runif(10, 20, 40),
+    var4 = runif(10, 20, 40),
+    var5 = runif(10, 20, 40),
+    var6 = runif(10, 20, 40)
+  ) |>
+  tidyr::pivot_longer(cols = -penguin_id) |>
+  dplyr::group_by(penguin_id) |>
+  dplyr::mutate(
+    value = dplyr::case_when(
+      value == max(value) ~ 
+        paste(scales::comma(value, accuracy = 0.1), "!!max!!"),
+      value == min(value) ~ 
+        paste(scales::comma(value, accuracy = 0.1), "!!min!!"),
+      TRUE ~ 
+        scales::comma(value, accuracy = 0.1)
+    )
+  ) |>
+  dplyr::ungroup() |>
+  tidyr::pivot_wider(names_from = name, values_from = value) |>
+  gt::gt() |>
+  output_table(min_max_styling = TRUE)
+```
+
+### Drop header rows
+It may be the case you have a table where you do not want to show the column headings, in this case you can set `drop_header = TRUE` to remove them from the output table.
+
+```{r}
+tibble::tribble(
+    ~question, ~response, ~value,
+    "A1", "I saw lots of penguins", 0.60,
+    "A1", "I saw a few penguins", 0.25,
+    "A1", "I saw no penguins", 0.15
+  ) |>
+  dplyr::mutate(
+    question = dplyr::case_when(
+      question == "A1" ~ "How many penguins did you see?"
+    ),
+    value = scales::percent(value, accuracy = 1)
+  ) |>
+  gt::gt(groupname_col = "question") |>
+  output_table(drop_header = TRUE)
+```
+
+### Smaller text size
+
+Sometimes you might be needed to include a large table in your report, in which case the default padding within the table might need to be reduced, you can make your table take up a "smaller" amount of space than it otherwise would by setting `small = TRUE`.
+
+```{r}
+palmerpenguins::penguins |>
+  dplyr::mutate(
+    penguin_id = paste("Penguin", dplyr::row_number(), sep = " #")
+  ) |>
+  tidyr::drop_na() |>
+  dplyr::group_by(species) |>
+  dplyr::sample_n(6) |>
+  dplyr::ungroup() |>
+  dplyr::select(penguin_id, species, bill_length_mm, 
+                flipper_length_mm, body_mass_g) |>
+  gt::gt() |>
+  output_table(small = TRUE)
+```
