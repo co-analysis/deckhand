@@ -154,3 +154,7 @@ table#example-table th {
   color: var(--co-primary-blue);
   font-weight: 500 !important;
 }
+
+dt {
+  font-weight: 500;
+}
